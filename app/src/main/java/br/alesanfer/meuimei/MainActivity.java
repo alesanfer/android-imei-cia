@@ -41,9 +41,6 @@ public class MainActivity extends AppCompatActivity {
             tIMEI.setText("IMEI : "+ getIMEI(this));
 
 
-            String serviceName = Context.TELEPHONY_SERVICE;
-            TelephonyManager m_telephonyManager = (TelephonyManager) getSystemService(serviceName);
-
             infos = "Model: " + android.os.Build.MODEL+"\n"+
                     "IMSI: "+ getIMSI(this)+ "\n"+
                     "Software Version: " + getSoftwareVersion(this)+ "\n"+
@@ -54,6 +51,30 @@ public class MainActivity extends AppCompatActivity {
             tInfos.setText(infos);
 
 
+            Button btEnviar = (Button) findViewById(R.id.btEnviar);
+
+            btEnviar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    TextView tvImei = (TextView) findViewById(R.id.txtIMEI);
+
+                    Bitmap bm = takeScreenShot(MainActivity.this);
+                    File file = saveBitmap(bm, "imei.jpeg");
+                    Log.i("chase", "filepath: "+file.getAbsolutePath());
+                    Uri uri = Uri.fromFile(new File(file.getAbsolutePath()));
+                    Intent shareIntent = new Intent();
+                    shareIntent.setAction(Intent.ACTION_SEND);
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, "MeuIMEI App \n " + tvImei.getText().toString()+ "\n" + infos );
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                    shareIntent.setType("image/*");
+                    shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    startActivity(Intent.createChooser(shareIntent, "Compartilhar via"));
+                }
+            });
+
+
+
         }else{
             // Solicita as permissões
             String[] permissoes = new String[]{
@@ -61,31 +82,49 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.READ_EXTERNAL_STORAGE
             };
-            PermissionUtils.validate(this, 0, permissoes);
+
+            if ( PermissionUtils.validate(this, 0, permissoes) ) {
+
+                tIMEI = (TextView) findViewById(R.id.txtIMEI);
+                tIMEI.setText("IMEI : "+ getIMEI(this));
+
+
+                infos = "Model: " + android.os.Build.MODEL+"\n"+
+                        "IMSI: "+ getIMSI(this)+ "\n"+
+                        "Software Version: " + getSoftwareVersion(this)+ "\n"+
+                        "Serial number: " + getSimSerialNumber(this)+ "\n"+
+                        "Operadora: " + getNetworkOperatorName(this);
+
+                tInfos = (TextView) findViewById(R.id.txtOthers);
+                tInfos.setText(infos);
+
+
+                Button btEnviar = (Button) findViewById(R.id.btEnviar);
+
+                btEnviar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        TextView tvImei = (TextView) findViewById(R.id.txtIMEI);
+
+                        Bitmap bm = takeScreenShot(MainActivity.this);
+                        File file = saveBitmap(bm, "imei.jpeg");
+                        Log.i("chase", "filepath: "+file.getAbsolutePath());
+                        Uri uri = Uri.fromFile(new File(file.getAbsolutePath()));
+                        Intent shareIntent = new Intent();
+                        shareIntent.setAction(Intent.ACTION_SEND);
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, "MeuIMEI App \n " + tvImei.getText().toString()+ "\n" + infos );
+                        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                        shareIntent.setType("image/*");
+                        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        startActivity(Intent.createChooser(shareIntent, "Compartilhar via"));
+                    }
+                });
+
+            }
         }
 
 
-        Button btEnviar = (Button) findViewById(R.id.btEnviar);
-
-        btEnviar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                TextView tvImei = (TextView) findViewById(R.id.txtIMEI);
-
-                Bitmap bm = takeScreenShot(MainActivity.this);
-                File file = saveBitmap(bm, "imei.jpeg");
-                Log.i("chase", "filepath: "+file.getAbsolutePath());
-                Uri uri = Uri.fromFile(new File(file.getAbsolutePath()));
-                Intent shareIntent = new Intent();
-                shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "MeuIMEI App \n " + tvImei.getText().toString()+ "\n" + infos );
-                shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                shareIntent.setType("image/*");
-                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivity(Intent.createChooser(shareIntent, "Compartilhar via"));
-            }
-        });
 
 
 
@@ -146,9 +185,6 @@ public class MainActivity extends AppCompatActivity {
             tIMEI.setText("IMEI : "+ getIMEI(this));
 
 
-            String serviceName = Context.TELEPHONY_SERVICE;
-            TelephonyManager m_telephonyManager = (TelephonyManager) getSystemService(serviceName);
-
             infos = "Model: " + android.os.Build.MODEL+"\n"+
                     "IMSI: "+ getIMSI(this)+ "\n"+
                     "Software Version: " + getSoftwareVersion(this)+ "\n"+
@@ -157,6 +193,28 @@ public class MainActivity extends AppCompatActivity {
 
             tInfos = (TextView) findViewById(R.id.txtOthers);
             tInfos.setText(infos);
+
+        Button btEnviar = (Button) findViewById(R.id.btEnviar);
+
+        btEnviar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                TextView tvImei = (TextView) findViewById(R.id.txtIMEI);
+
+                Bitmap bm = takeScreenShot(MainActivity.this);
+                File file = saveBitmap(bm, "imei.jpeg");
+                Log.i("chase", "filepath: "+file.getAbsolutePath());
+                Uri uri = Uri.fromFile(new File(file.getAbsolutePath()));
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "MeuIMEI App \n " + tvImei.getText().toString()+ "\n" + infos );
+                shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                shareIntent.setType("image/*");
+                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(Intent.createChooser(shareIntent, "Compartilhar via"));
+            }
+        });
 
     }
 
